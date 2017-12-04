@@ -44,6 +44,7 @@ public class Manager extends Activity {
 	private List<Drawable> images;
 	private Card firstCard;
 	private Card seconedCard;
+	private Music backgroundMusic;
 	
 	private static Object lock = new Object();
 	
@@ -60,7 +61,7 @@ public class Manager extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//		startService(new Intent(Manager.this, MusicService.class));
+		backgroundMusic = Music.get(this);
 
 		setContentView(R.layout.main);
 

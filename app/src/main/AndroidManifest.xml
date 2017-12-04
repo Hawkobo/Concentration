@@ -30,8 +30,6 @@
             android:resource="@array/preloaded_fonts"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".MusicService" />
-
         <activity
             android:name=".scoreScreenActivity"
             android:label="@string/title_activity_score_screen"
