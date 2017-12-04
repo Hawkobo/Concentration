@@ -9,7 +9,7 @@ public class Card implements Serializable{
 
 	public int x;
 	public int y;
-	public Button button;
+	public transient Button button;
 	
 	public Card(Button button, int x,int y) {
 		this.x = x;

@@ -31,4 +31,10 @@ public class scoreScreenActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(scoreScreenActivity.this, Manager.class);
+        startActivity(i);
+    }
+
 }
