@@ -1,6 +1,9 @@
 package com.example.jason.ftp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,55 +15,57 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class HSActivity extends AppCompatActivity {
 
-    private TextView[] highScores;
-    private Scanner file;
+    final int NUM_OF_SCORES = 5;
+    InputStream is;
+    Scanner kb;
+    String[] highScores;
+    int[] HSInts;
+    int newScore;
+    TextView score1;
+    TextView score2;
+    TextView score3;
+    TextView score4;
+    TextView score5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        highScores = new TextView[]{findViewById(R.id.score1), findViewById(R.id.score2), findViewById(R.id.score3), findViewById(R.id.score4), findViewById(R.id.score5)};
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_hs);
 
-        File scores = new File("highscore.txt");
+        highScores = new String[NUM_OF_SCORES];
+        HSInts = new int[NUM_OF_SCORES];
+        score1 = (TextView) findViewById(R.id.score1);
+        score2 = (TextView) findViewById(R.id.score2);
+        score3 = (TextView) findViewById(R.id.score3);
+        score4 = (TextView) findViewById(R.id.score4);
+        score5 = (TextView) findViewById(R.id.score5);
+        newScore = getIntent().getIntExtra("score", 0);
 
         try {
-            if (!scores.exists()) {
-                scores.createNewFile();
-
-                FileWriter fw = new FileWriter(scores);
-
-                for (int i = 0; i < highScores.length; i++)
-                {
-                    highScores[i].setText("ABC");
-                    fw.write("ABC\n");
-                }
-
-                fw.flush();
-                fw.close();
-            } else {
-                file = new Scanner(scores);
-
-                for (int i = 0; i < highScores.length; i++)
-                {
-                    highScores[i].setText(file.nextLine());
-                }
-            }
+            AssetManager am = this.getAssets();
+            is = am.open("score.txt");
+            kb = new Scanner(is);
         }
-        catch (FileNotFoundException e) {
-            e.getMessage();
-        }
-        catch (IOException e) {
+        catch(IOException e){
             e.getMessage();
         }
 
+        for (int i = 0; i < highScores.length; i++)
+        {
+            highScores[i] = kb.nextLine();
+            HSInts[i] = Integer.parseInt(highScores[i].replaceAll("[\\D]", ""));
+        }
 
-
-        ((TextView)findViewById(R.id.score1)).setText("ABC");
+        score1.setText(highScores[0]);
+        score2.setText(highScores[1]);
+        score3.setText(highScores[2]);
+        score4.setText(highScores[3]);
+        score5.setText(highScores[4]);
 
         ((Button)findViewById(R.id.menuButton)).setOnClickListener(new View.OnClickListener() {
 
@@ -73,69 +78,5 @@ public class HSActivity extends AppCompatActivity {
 
 
         });
-    }
-
-    public boolean isHighScore(int x)
-    {
-        boolean higher = false;
-        String line;
-        String[] splitLine;
-
-        for (int i = 0; i < highScores.length; i++)
-        {
-            line = highScores[i].getText().toString();
-            splitLine = line.split(" ");
-            if (x > Integer.parseInt(splitLine[1]))
-            {
-                higher = true;
-                break;
-            }
-        }
-        return higher;
-    }
-
-    public void updateHighScore(int x, String name) throws IOException
-    {
-        boolean higher = false;
-        int position = 0;
-
-        String line;
-        String[] splitLine;
-
-        for (int i = 0; i < highScores.length; i++)
-        {
-            line = highScores[i].getText().toString();
-            splitLine = line.split(" ");
-            if (x > Integer.parseInt(splitLine[1]))
-            {
-                higher = true;
-                position = i;
-                break;
-            }
-        }
-
-        if (higher)
-        {
-            TextView tempT;
-            TextView newScore = new TextView(this);
-            newScore.setText(name + " " + x);
-
-            for (int i = position; i < highScores.length; i++)
-            {
-                tempT = highScores[i];
-                highScores[i] = newScore;
-                newScore = tempT;
-            }
-
-            FileWriter fw = new FileWriter(new File("highscore.txt"));
-
-            for (int i = 0; i < highScores.length; i++)
-            {
-                fw.write(highScores[i].getText().toString() + "\n");
-            }
-
-            fw.flush();
-            fw.close();
-        }
     }
 }

@@ -48,6 +48,7 @@ public class gameActivity extends AppCompatActivity
     private TableLayout mainTable;
     private UpdateCardsHandler handler;
     private int score;
+    private int name;
 
     @Override
     public void onBackPressed() {
@@ -63,6 +64,7 @@ public class gameActivity extends AppCompatActivity
 
         //Log.i("NUMWORDS IS ", String.valueOf(getIntent().getIntExtra("numwords", 0)));
         numWords = getIntent().getIntExtra("numWords", 10);
+        score = getIntent().getIntExtra("score", 0);
 
         handler = new UpdateCardsHandler();
         loadImages();
@@ -127,6 +129,7 @@ public class gameActivity extends AppCompatActivity
             {
                 Intent i = new Intent(gameActivity.this, gameActivity.class);
                 i.putExtra("numWords", numWords);
+                i.putExtra("score", score);
                 startActivity(i);
                 //newGame(COL_COUNT, ROW_COUNT);
             }
@@ -141,6 +144,8 @@ public class gameActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Intent i = new Intent(gameActivity.this, scoreScreenActivity.class);
+                i.putExtra("numWords", numWords);
+                i.putExtra("score", score);
                 startActivity(i);
 
             }
@@ -509,7 +514,9 @@ public class gameActivity extends AppCompatActivity
 
             if (gameOver)
             {
-                // TODO: 12/3/2017 Add highscore activity
+                Intent i = new Intent(gameActivity.this,scoreScreenActivity.class);
+                i.putExtra("score", score);
+                startActivity(i);
             }
         }
     }
