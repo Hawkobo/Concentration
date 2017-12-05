@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.File;
@@ -32,10 +34,29 @@ public class HSActivity extends AppCompatActivity {
     TextView score4;
     TextView score5;
 
+    ImageButton disableMusic;
+    boolean playing;
+
+    Intent svc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hs);
+
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+        playing = getIntent().getExtras().getBoolean("playingValue");
+
+        svc =new Intent(this, MusicService.class);
+        svc.setAction("com.example.jason.ftp.MusicService");
+        startService(svc);
+
+
+        if(playing ==true){
+
+        }
+        else{
+            stopService(svc);
+        }
 
         highScores = new String[NUM_OF_SCORES];
         HSInts = new int[NUM_OF_SCORES];
@@ -48,7 +69,7 @@ public class HSActivity extends AppCompatActivity {
 
         try {
             AssetManager am = this.getAssets();
-            is = am.open("score.txt");
+            is = am.open("scores.txt");
             kb = new Scanner(is);
         }
         catch(IOException e){
@@ -67,11 +88,32 @@ public class HSActivity extends AppCompatActivity {
         score4.setText(highScores[3]);
         score5.setText(highScores[4]);
 
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                if(playing ==true){
+                    stopService(svc);
+                    playing=false;
+                }
+                else{
+                    startService(svc);
+                    playing=true;
+                }
+
+            }
+
+
+        });
+
         ((Button)findViewById(R.id.menuButton)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(HSActivity.this, Manager.class);
+                i.putExtra("playingValue", playing);
                 startActivity(i);
 
             }

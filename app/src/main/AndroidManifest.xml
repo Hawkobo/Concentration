@@ -36,6 +36,9 @@
             android:name=".scoreScreenActivity"
             android:label="@string/title_activity_score_screen"
             android:theme="@style/AppTheme"></activity>
+
+        <!-- define service-->
+        <service android:enabled="true" android:name=".MusicService" />
     </application>
 
 </manifest>

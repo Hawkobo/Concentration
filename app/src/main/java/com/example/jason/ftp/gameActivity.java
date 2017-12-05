@@ -1,13 +1,16 @@
 package com.example.jason.ftp;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -49,10 +53,13 @@ public class gameActivity extends AppCompatActivity
     private UpdateCardsHandler handler;
     private int score;
     private int name;
+    Intent svc;
+    boolean playing;
+    ImageButton disableMusic;
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(gameActivity.this, Manager.class);
+        Intent i = new Intent(this, Manager.class);
         startActivity(i);
     }
 
@@ -61,6 +68,26 @@ public class gameActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
+
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+
+
+        playing = getIntent().getExtras().getBoolean("playingValue");
+
+
+
+        svc =new Intent(this, MusicService.class);
+        svc.setAction("com.example.jason.ftp.MusicService");
+        startService(svc);
+
+        if(playing ==true){
+
+        }
+        else{
+            stopService(svc);
+        }
+
+
 
         //Log.i("NUMWORDS IS ", String.valueOf(getIntent().getIntExtra("numwords", 0)));
         numWords = getIntent().getIntExtra("numWords", 10);
@@ -103,6 +130,26 @@ public class gameActivity extends AppCompatActivity
                 break;
         }
 
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                if(playing ==true){
+                    stopService(svc);
+                    playing=false;
+                }
+                else{
+                    startService(svc);
+                    playing=true;
+                }
+
+            }
+
+
+        });
+
         ((Button) findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener()
         {
 
@@ -125,17 +172,18 @@ public class gameActivity extends AppCompatActivity
         {
 
             @Override
-            public void onClick(View v)
+            public void onClick(View view)
             {
-                Intent i = new Intent(gameActivity.this, gameActivity.class);
-                i.putExtra("numWords", numWords);
-                i.putExtra("score", score);
-                startActivity(i);
-                //newGame(COL_COUNT, ROW_COUNT);
+                DialogFragment dialog = new PlayDialogFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("playingValue", playing);
+                dialog.setArguments(bundle);
+
+                dialog.show(getFragmentManager(), "play");
             }
-
-
         });
+
 
         ((Button) findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener()
         {
@@ -143,16 +191,51 @@ public class gameActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent i = new Intent(gameActivity.this, scoreScreenActivity.class);
-                i.putExtra("numWords", numWords);
-                i.putExtra("score", score);
-                startActivity(i);
+                for(int i = 0; i < buttons.length; i++)
+                {
+                    for(int j = 0; j < buttons[i].length; j++)
+                    {
+                        buttons[i][j].setBackgroundDrawable(images.get(cards[i][j]));
+                        buttons[i][j].setClickable(false);
+                    }
+                }
 
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        Log.i("Sleeping ", "maybe");
+                        Intent i = new Intent(gameActivity.this, scoreScreenActivity.class);
+                        i.putExtra("numWords", numWords);
+                        i.putExtra("score", score);
+                        i.putExtra("playingValue", playing);
+                        firstCard = null;
+                        secondCard = null;
+                        score = 0;
+                        i.putExtra("numWords", numWords);
+                        i.putExtra("score", score);
+                        startActivity(i);
+                    }
+                }, 5000);   //5 seconds
             }
 
 
         });
 
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    protected void onResume() {
+        super.onResume();
+    }
+
+    protected void onPause() {
+        super.onPause();
     }
 
 
@@ -516,8 +599,12 @@ public class gameActivity extends AppCompatActivity
             {
                 Intent i = new Intent(gameActivity.this,scoreScreenActivity.class);
                 i.putExtra("score", score);
+                i.putExtra("playingValue", playing);
                 startActivity(i);
             }
         }
     }
+
+
+
 }

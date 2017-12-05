@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,21 +17,72 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
+
 public class scoreScreenActivity extends AppCompatActivity {
 
-    int score;
+    private final int NUM_OF_SCORES = 5;
+    private InputStream is;
+    private FileWriter fw;
+    private Scanner kb;
+    private AssetManager am;
+    private String[] highScores;
+    private int[] HSInts;
+    private int score;
     private AlertDialog.Builder builder;
     private EditText input;
     private String m_Text = "";
+    private String newEntry;
+    Intent svc;
+    ImageButton disableMusic;
+    Boolean playing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_screen);
+
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+        playing = getIntent().getExtras().getBoolean("playingValue");
+
+        svc =new Intent(this, MusicService.class);
+        svc.setAction("com.example.jason.ftp.MusicService");
+        startService(svc);
+
+
+        if(playing ==true){
+
+        }
+        else{
+            stopService(svc);
+        }
+
+        highScores = new String[NUM_OF_SCORES];
+        HSInts = new int[NUM_OF_SCORES];
+
+        try {
+            am = this.getAssets();
+            is = am.open("scores.txt");
+            kb = new Scanner(is);
+        }
+        catch(IOException e){
+            e.getMessage();
+        }
+
+        for (int i = 0; i < highScores.length; i++)
+        {
+            highScores[i] = kb.nextLine();
+            HSInts[i] = Integer.parseInt(highScores[i].replaceAll("[\\D]", ""));
+        }
 
         score = getIntent().getIntExtra("score", 0);
         TextView scoreLabel = findViewById(R.id.scoreLabel);
@@ -42,13 +94,33 @@ public class scoreScreenActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
         input = new EditText(this);
 
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                if(playing ==true){
+                    stopService(svc);
+                    playing=false;
+                }
+                else{
+                    startService(svc);
+                    playing=true;
+                }
+
+            }
+
+
+        });
+
         ((Button)findViewById(R.id.scoreMenuButton)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view)
             {
 
-                if (0==0)
+                if (score >= HSInts[HSInts.length - 1])
                 {
 
                     builder.setTitle("    New High Score! Enter your name: \n               Limit: Three characters");
@@ -65,21 +137,65 @@ public class scoreScreenActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             m_Text = input.getText().toString();
+                            newEntry = m_Text + "..." + score;
+                            try { updateHighScore(newEntry, score); } catch (IOException e) { e.getMessage(); }
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
+                            startActivity(new Intent(scoreScreenActivity.this, Manager.class));
                         }
                     });
 
                     builder.show();
                 }
+                else
+                {
+                    Intent i = new Intent(scoreScreenActivity.this, Manager.class);
+                    i.putExtra("playingValue", playing);
+                    startActivity(i);
+                }
 
             }
         });
-
     }
 
+    private void updateHighScore(String newEntry, int score) throws IOException
+    {
+        try {
+            am = this.getAssets();
+            is = am.open("scores.txt");
+            fw = new FileWriter(new File("scores.txt"));
+        }
+        catch(IOException e){
+            e.getMessage();
+        }
+
+        int count = 0; boolean found = false;
+        while (!found && count < highScores.length)
+        {
+            if (score >= HSInts[count])
+            {
+                highScores[count] = newEntry;
+                for (int i = 0; i < highScores.length; i++)
+                {
+                    fw.write(highScores[i]);
+                }
+                found = true;
+            }
+            count++;
+        }
+
+        am.close();
+    }
+
+    protected void onStop() {
+        super.onStop();
+    }
+
+    protected void onPause() {
+        super.onPause();
+    }
 }

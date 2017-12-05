@@ -109,4 +109,21 @@
         app:layout_constraintTop_toTopOf="@+id/animation_view2"
         app:layout_constraintVertical_bias="0.803" />
 
+    <ImageButton
+        android:id="@+id/disableMusic"
+        style="@android:style/Widget.DeviceDefault.ImageButton"
+        android:layout_width="61dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="8dp"
+        android:background="@null"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="right|top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/speaker" />
+
 </android.support.constraint.ConstraintLayout>

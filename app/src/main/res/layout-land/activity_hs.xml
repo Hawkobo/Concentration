@@ -16,6 +16,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_hs" />
+    <include
+        android:id="@+id/include2"
+        layout="@layout/content_hs" />
+
+    <ImageButton
+        android:id="@+id/disableMusic"
+        style="@android:style/Widget.DeviceDefault.ImageButton"
+        android:layout_width="72dp"
+        android:layout_height="58dp"
+        android:background="@null"
+        app:layout_anchor="@+id/include2"
+        app:layout_anchorGravity="right|top"
+        app:srcCompat="@drawable/speaker"
+        tools:layout_editor_absoluteX="555dp" />
 
 </android.support.design.widget.CoordinatorLayout>

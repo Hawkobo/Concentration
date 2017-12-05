@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/text1"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:layout_weight="1"
             android:paddingLeft="10sp"></TextView>
     </TableRow>
@@ -63,7 +63,9 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play" />
+            android:text="Play"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </TableRow>
 
@@ -78,7 +80,26 @@
             style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="High Scores" />
+            android:text="High Scores"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tr06"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/disableMusic"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Disable Music"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </TableRow>
 
