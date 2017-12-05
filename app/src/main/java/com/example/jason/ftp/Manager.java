@@ -1,43 +1,33 @@
+/***************************************************************
+ * file: Manager.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: The menu screen activity that consists of navigation
+ * between the high score activity and the gameActivity.
+ ****************************************************************/
+
 package com.example.jason.ftp;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.regex.Pattern;
-
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.constraint.ConstraintLayout;
-import android.text.util.Linkify;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 public class Manager extends Activity {
 
@@ -56,6 +46,7 @@ public class Manager extends Activity {
 	public boolean playing;
 
 
+	//when activity is created, perform operations.
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -92,6 +83,7 @@ public class Manager extends Activity {
 		mainTitle.setAnimation(fromtop);
 		disableMusic.setAnimation(frombottom);
 
+		//checks if music is playing or not to set the text button
 		if(extras !=null){
 			if (extras.containsKey("playingValue")) {
 				boolean isNew = extras.getBoolean("playingValue");
@@ -108,6 +100,7 @@ public class Manager extends Activity {
 			}
 		}
 
+		//DISABLE MUSIC BUTTON
 		disableMusic.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -127,6 +120,7 @@ public class Manager extends Activity {
 			}
 		});
 
+		//PLAY BUTTON
 		((Button)findViewById(R.id.Play)).setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -142,6 +136,7 @@ public class Manager extends Activity {
 			}
 		});
 
+		//HIGH SCORE BUTTON
 		((Button)findViewById(R.id.Menu)).setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -163,18 +158,21 @@ public class Manager extends Activity {
 
 	}
 
+	//when activity is resumed, call super
 	@Override
 	public void onResume()
 	{
 		super.onResume();
 	}
 
+	//when activity is destroyed, call super
 	@Override
 	public void onDestroy()
 	{
 		super.onDestroy();
 	}
 
+	//when backspace (ancestral nav) is pressed, remove all flags and exit.
 	@Override
 	public void onBackPressed() {
 		stopService(svc);
@@ -187,6 +185,7 @@ public class Manager extends Activity {
 	}
 
 
+	//when activity is paused, stop music.
 	@Override
 	public void onPause() {
 		if (isApplicationSentToBackground(this)){
@@ -201,6 +200,7 @@ public class Manager extends Activity {
 		super.onStop();
 	}
 
+	//handles determining if home button is pressed
 	public boolean isApplicationSentToBackground(final Context context) {
 		ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
