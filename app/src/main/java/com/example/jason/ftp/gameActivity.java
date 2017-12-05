@@ -512,6 +512,7 @@ public class gameActivity extends AppCompatActivity
             {
                 Intent i = new Intent(gameActivity.this,scoreScreenActivity.class);
                 i.putExtra("score", score);
+                i.putExtra("numWords", numWords);
                 startActivity(i);
             }
         }

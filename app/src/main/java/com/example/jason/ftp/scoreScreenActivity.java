@@ -37,7 +37,7 @@ import java.util.Scanner;
 public class scoreScreenActivity extends AppCompatActivity {
 
     private File file;
-
+    private int numWords;
     private final int NUM_OF_SCORES = 5;
     private InputStreamReader isr;
     private OutputStreamWriter osw;
@@ -62,7 +62,40 @@ public class scoreScreenActivity extends AppCompatActivity {
         highScores = new String[NUM_OF_SCORES];
         HSInts = new int[NUM_OF_SCORES];
 
-        file = new File(this.getFilesDir(), "scores.txt");
+        numWords = getIntent().getIntExtra("numWords", 0);
+
+        switch(numWords)
+        {
+            case 2:
+                file = new File(this.getFilesDir(), "scores2.txt");
+                break;
+            case 3:
+                file = new File(this.getFilesDir(), "scores3.txt");
+                break;
+            case 4:
+                file = new File(this.getFilesDir(), "scores4.txt");
+                break;
+            case 5:
+                file = new File(this.getFilesDir(), "scores5.txt");
+                break;
+            case 6:
+                file = new File(this.getFilesDir(), "scores6.txt");
+                break;
+            case 7:
+                file = new File(this.getFilesDir(), "scores7.txt");
+                break;
+            case 8:
+                file = new File(this.getFilesDir(), "scores8.txt");
+                break;
+            case 9:
+                file = new File(this.getFilesDir(), "scores9.txt");
+                break;
+            case 10:
+                file = new File(this.getFilesDir(), "scores10.txt");
+                break;
+            default:
+                break;
+        }
 
         try {
             if(file.length() == 0 || !file.exists())

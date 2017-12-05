@@ -23,11 +23,14 @@ import java.util.Scanner;
 public class HSActivity extends AppCompatActivity {
 
     private final int NUM_OF_SCORES = 5;
+    private File file;
+    private int numWords;
     private FileInputStream fis;
     private String contents;
     private Scanner kb;
     private AssetManager am;
     private String[] highScores;
+    private FileOutputStream fos;
     private int newScore;
     private TextView score1;
     private TextView score2;
@@ -64,12 +67,55 @@ public class HSActivity extends AppCompatActivity {
         score3 = (TextView) findViewById(R.id.score3);
         score4 = (TextView) findViewById(R.id.score4);
         score5 = (TextView) findViewById(R.id.score5);
+
         newScore = getIntent().getIntExtra("score", 0);
+        numWords = getIntent().getIntExtra("numWords", 0);
+
+        switch(numWords)
+        {
+            case 2:
+                file = new File(this.getFilesDir(), "scores2.txt");
+                break;
+            case 3:
+                file = new File(this.getFilesDir(), "scores3.txt");
+                break;
+            case 4:
+                file = new File(this.getFilesDir(), "scores4.txt");
+                break;
+            case 5:
+                file = new File(this.getFilesDir(), "scores5.txt");
+                break;
+            case 6:
+                file = new File(this.getFilesDir(), "scores6.txt");
+                break;
+            case 7:
+                file = new File(this.getFilesDir(), "scores7.txt");
+                break;
+            case 8:
+                file = new File(this.getFilesDir(), "scores8.txt");
+                break;
+            case 9:
+                file = new File(this.getFilesDir(), "scores9.txt");
+                break;
+            case 10:
+                file = new File(this.getFilesDir(), "scores10.txt");
+                break;
+            default:
+                break;
+        }
+
 
         try {
-            fis = openFileInput("scores.txt");
+            if(file.length() == 0 || !file.exists())
+            {
+                fos = new FileOutputStream(file);
+                fis = new FileInputStream(file);
+                fos.write("ABC...5\nABC...4\nABC...3\nABC...2\nABC...1".getBytes());
+            }
 
-            int length = (int) getFileStreamPath("scores.txt").length();
+            fis = new FileInputStream(file);
+
+            int length = (int) file.length();
             byte[] bytes = new byte[length];
             fis.read(bytes);
             contents = new String(bytes);
