@@ -70,6 +70,7 @@ public class Manager extends Activity {
 		startService(svc);
 
 
+
 		setContentView(R.layout.main);
 
 		myLayout = (TableLayout)findViewById(R.id.bg);
@@ -94,15 +95,17 @@ public class Manager extends Activity {
 
 		if(extras !=null){
 			if (extras.containsKey("playingValue")) {
-				boolean isNew = extras.getBoolean("playingValue", true);
-				if(isNew == true){
+				boolean isNew = extras.getBoolean("playingValue");
+				if(isNew){
+
 					disableMusic.setText("Disable Music");
 					playing = true;
 				}
-				else
+				else {
 					stopService(svc);
 					disableMusic.setText("Enable Music");
 					playing = false;
+				}
 			}
 		}
 
