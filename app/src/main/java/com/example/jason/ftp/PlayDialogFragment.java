@@ -9,10 +9,6 @@ import android.os.Bundle;
 
 import com.example.jason.ftp.R;
 
-/**
- * Created by Jason on 11/22/2017.
- */
-
 public class PlayDialogFragment extends DialogFragment
 {
     @Override
@@ -29,6 +25,7 @@ public class PlayDialogFragment extends DialogFragment
                         String[] optionsArray = getResources().getStringArray(R.array.play_dialog_string_array);
 
                         Intent nextAct = new Intent(getActivity(), gameActivity.class);
+                        nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));
                         nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));
                         startActivity(nextAct);
                     }

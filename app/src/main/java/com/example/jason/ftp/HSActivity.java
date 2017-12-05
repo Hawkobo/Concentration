@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.File;
@@ -38,10 +39,29 @@ public class HSActivity extends AppCompatActivity {
     private TextView score4;
     private TextView score5;
 
+    ImageButton disableMusic;
+    boolean playing;
+
+    Intent svc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hs);
+
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+        playing = getIntent().getExtras().getBoolean("playingValue");
+
+        svc =new Intent(this, MusicService.class);
+        svc.setAction("com.example.jason.ftp.MusicService");
+        startService(svc);
+
+        if(playing ==true){
+
+        }
+        else{
+            stopService(svc);
+        }
 
         setHighScores();
 
@@ -58,8 +78,7 @@ public class HSActivity extends AppCompatActivity {
         });
     }
 
-    private void setHighScores()
-    {
+    private void setHighScores() {
         highScores = new String[NUM_OF_SCORES];
 
         score1 = (TextView) findViewById(R.id.score1);
@@ -71,8 +90,7 @@ public class HSActivity extends AppCompatActivity {
         newScore = getIntent().getIntExtra("score", 0);
         numWords = getIntent().getIntExtra("numWords", 0);
 
-        switch(numWords)
-        {
+        switch (numWords) {
             case 2:
                 file = new File(this.getFilesDir(), "scores2.txt");
                 break;
@@ -106,8 +124,7 @@ public class HSActivity extends AppCompatActivity {
 
 
         try {
-            if(file.length() == 0 || !file.exists())
-            {
+            if (file.length() == 0 || !file.exists()) {
                 fos = new FileOutputStream(file);
                 fis = new FileInputStream(file);
                 fos.write("ABC...5\nABC...4\nABC...3\nABC...2\nABC...1".getBytes());
@@ -120,13 +137,11 @@ public class HSActivity extends AppCompatActivity {
             fis.read(bytes);
             contents = new String(bytes);
             kb = new Scanner(contents);
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.getMessage();
         }
 
-        for (int i = 0; i < highScores.length; i++)
-        {
+        for (int i = 0; i < highScores.length; i++) {
             highScores[i] = kb.nextLine();
         }
 
@@ -135,5 +150,31 @@ public class HSActivity extends AppCompatActivity {
         score3.setText(highScores[2]);
         score4.setText(highScores[3]);
         score5.setText(highScores[4]);
+
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (playing == true) {
+                    stopService(svc);
+                    playing = false;
+                } else {
+                    startService(svc);
+                    playing = true;
+                }
+                ((Button) findViewById(R.id.menuButton)).setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(com.example.jason.ftp.HSActivity.this, Manager.class);
+                        i.putExtra("playingValue", playing);
+                        startActivity(i);
+
+                    }
+
+
+                });
+            }
+        });
     }
 }

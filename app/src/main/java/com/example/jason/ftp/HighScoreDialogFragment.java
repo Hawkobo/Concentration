@@ -24,6 +24,7 @@ public class HighScoreDialogFragment extends DialogFragment
 
                         Intent nextAct = new Intent(getActivity(), HSActivity.class);
                         nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));
+                        nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));
                         startActivity(nextAct);
                     }
                 })

@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -53,12 +54,29 @@ public class scoreScreenActivity extends AppCompatActivity {
     private EditText input;
     private String m_Text = "";
     private String newEntry;
+    Intent svc;
+    ImageButton disableMusic;
+    Boolean playing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_screen);
 
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+        playing = getIntent().getExtras().getBoolean("playingValue");
+
+        svc =new Intent(this, MusicService.class);
+        svc.setAction("com.example.jason.ftp.MusicService");
+        startService(svc);
+
+
+        if(playing ==true){
+
+        }
+        else{
+            stopService(svc);
+        }
         highScores = new String[NUM_OF_SCORES];
         HSInts = new int[NUM_OF_SCORES];
 
@@ -132,6 +150,26 @@ public class scoreScreenActivity extends AppCompatActivity {
         builder = new AlertDialog.Builder(this);
         input = new EditText(this);
 
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v)
+            {
+                if(playing ==true){
+                    stopService(svc);
+                    playing=false;
+                }
+                else{
+                    startService(svc);
+                    playing=true;
+                }
+
+            }
+
+
+        });
+
         ((Button)findViewById(R.id.scoreMenuButton)).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -171,8 +209,9 @@ public class scoreScreenActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    startActivity(new Intent(scoreScreenActivity.this, Manager.class));
-                }
+                    Intent i = new Intent(com.example.jason.ftp.scoreScreenActivity.this, Manager.class);
+                    i.putExtra("playingValue", playing);
+                    startActivity(i);                }
 
             }
         });
@@ -209,5 +248,18 @@ public class scoreScreenActivity extends AppCompatActivity {
 
         fos.close();
         fis.close();
+    }
+    protected void onStop() {
+        super.onStop();
+    }
+
+    protected void onPause() {
+        super.onPause();
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, Manager.class);
+        i.putExtra("playingValue", playing);
+        startActivity(i);
     }
 }

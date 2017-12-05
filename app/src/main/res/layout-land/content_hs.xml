@@ -9,6 +9,16 @@
     tools:layout_editor_absoluteY="25dp"
     tools:showIn="@layout/activity_hs">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="67dp"
+        android:paddingBottom="50dp"
+        app:lottie_fileName="trophy.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true" />
+
     <TextView
         android:id="@+id/score5"
         android:layout_width="592dp"
