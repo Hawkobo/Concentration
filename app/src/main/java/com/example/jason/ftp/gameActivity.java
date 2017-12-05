@@ -3,14 +3,12 @@ package com.example.jason.ftp;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +57,8 @@ public class gameActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(this, Manager.class);
+        Intent i = new Intent(gameActivity.this, Manager.class);
+        i.putExtra("playingValue", playing);
         startActivity(i);
     }
 
@@ -86,7 +85,6 @@ public class gameActivity extends AppCompatActivity
         else{
             stopService(svc);
         }
-
 
 
         //Log.i("NUMWORDS IS ", String.valueOf(getIntent().getIntExtra("numwords", 0)));
@@ -149,7 +147,6 @@ public class gameActivity extends AppCompatActivity
 
 
         });
-
         ((Button) findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener()
         {
 
@@ -168,8 +165,7 @@ public class gameActivity extends AppCompatActivity
 
         });
 
-        ((Button) findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener()
-        {
+        ((Button)findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view)
@@ -183,7 +179,6 @@ public class gameActivity extends AppCompatActivity
                 dialog.show(getFragmentManager(), "play");
             }
         });
-
 
         ((Button) findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener()
         {
@@ -200,11 +195,15 @@ public class gameActivity extends AppCompatActivity
                     }
                 }
 
+                findViewById(R.id.button1).setClickable(false);
+                findViewById(R.id.button2).setClickable(false);
+                findViewById(R.id.button3).setClickable(false);
+
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         Log.i("Sleeping ", "maybe");
-                        Intent i = new Intent(gameActivity.this, scoreScreenActivity.class);
+                        Intent i = new Intent(com.example.jason.ftp.gameActivity.this, scoreScreenActivity.class);
                         i.putExtra("numWords", numWords);
                         i.putExtra("score", score);
                         i.putExtra("playingValue", playing);
@@ -215,15 +214,14 @@ public class gameActivity extends AppCompatActivity
                         i.putExtra("score", score);
                         startActivity(i);
                     }
-                }, 5000);   //5 seconds
+                }, 2000);   //2 seconds
+
             }
 
 
         });
 
     }
-
-
 
     @Override
     protected void onStop() {
@@ -237,7 +235,6 @@ public class gameActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
@@ -599,12 +596,10 @@ public class gameActivity extends AppCompatActivity
             {
                 Intent i = new Intent(gameActivity.this,scoreScreenActivity.class);
                 i.putExtra("score", score);
+                i.putExtra("numWords", numWords);
                 i.putExtra("playingValue", playing);
                 startActivity(i);
             }
         }
     }
-
-
-
 }

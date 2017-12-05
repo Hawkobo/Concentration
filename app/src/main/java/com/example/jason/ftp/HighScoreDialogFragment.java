@@ -1,15 +1,13 @@
 package com.example.jason.ftp;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
-import com.example.jason.ftp.R;
-
-public class PlayDialogFragment extends DialogFragment
+public class HighScoreDialogFragment extends DialogFragment
 {
     @Override
     public Dialog onCreateDialog(Bundle savedInstancedState)
@@ -24,9 +22,9 @@ public class PlayDialogFragment extends DialogFragment
                     {
                         String[] optionsArray = getResources().getStringArray(R.array.play_dialog_string_array);
 
-                        Intent nextAct = new Intent(getActivity(), gameActivity.class);
-                        nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));
+                        Intent nextAct = new Intent(getActivity(), HSActivity.class);
                         nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));
+                        nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));
                         startActivity(nextAct);
                     }
                 })

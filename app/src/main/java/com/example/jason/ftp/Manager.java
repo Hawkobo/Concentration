@@ -40,7 +40,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class Manager extends Activity {
-	
+
 	private static Object lock = new Object();
 
 	private TableLayout mainTable;
@@ -56,11 +56,10 @@ public class Manager extends Activity {
 	public boolean playing;
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        playing = true;
-		//backgroundMusic = Music.get(this);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		playing = true;
 		Intent intent = getIntent();
 
 		Bundle extras = intent.getExtras();
@@ -128,46 +127,47 @@ public class Manager extends Activity {
 			}
 		});
 
-       ((Button)findViewById(R.id.Play)).setOnClickListener(new OnClickListener() {
+		((Button)findViewById(R.id.Play)).setOnClickListener(new OnClickListener() {
 
-		   @Override
-		   public void onClick(View view)
-		   {
-			   DialogFragment dialog = new PlayDialogFragment();
+			@Override
+			public void onClick(View view)
+			{
+				DialogFragment dialog = new PlayDialogFragment();
 
-			   Bundle bundle = new Bundle();
-			   bundle.putBoolean("playingValue", playing);
-			   dialog.setArguments(bundle);
+				Bundle bundle = new Bundle();
+				bundle.putBoolean("playingValue", playing);
+				dialog.setArguments(bundle);
 
-			   dialog.show(getFragmentManager(), "play");
-		   }
-	});
+				dialog.show(getFragmentManager(), "play");
+			}
+		});
 
 		((Button)findViewById(R.id.Menu)).setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(Manager.this, HSActivity.class);
-				i.putExtra("playingValue", playing);
-				startActivity(i);
+				DialogFragment dialog = new HighScoreDialogFragment();
+
+				Bundle bundle = new Bundle();
+				bundle.putBoolean("playingValue", playing);
+				dialog.setArguments(bundle);
+
+				dialog.show(getFragmentManager(), "highscore");
 
 
 			}
 
 
 		});
-      
 
-    }
+
+	}
 
 	@Override
 	public void onResume()
 	{
 		super.onResume();
 	}
-
-
-
 
 	@Override
 	public void onDestroy()
