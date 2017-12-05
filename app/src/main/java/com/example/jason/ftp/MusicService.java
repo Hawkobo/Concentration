@@ -19,7 +19,6 @@ import android.os.IBinder;
 
 
 public class MusicService extends Service {
-    private static final String TAG = null;
     MediaPlayer player;
 
     public IBinder onBind(Intent arg0) {
@@ -44,17 +43,6 @@ public class MusicService extends Service {
     public void onStart(Intent intent, int startId) {
         player.start();
     }
-    public IBinder onUnBind(Intent arg0) {
-        return null;
-    }
-
-    public void onStop() {
-        player.stop();
-    }
-    public void onPause() {
-        player.stop();
-    }
-
 
     //When app is destroyed, stop and release music.
     @Override

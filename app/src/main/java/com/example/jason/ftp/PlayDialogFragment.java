@@ -19,8 +19,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 
-import com.example.jason.ftp.R;
-
 public class PlayDialogFragment extends DialogFragment
 {
     //When dialog is created

@@ -31,9 +31,6 @@ import android.widget.TextView;
 
 public class Manager extends Activity {
 
-	private static Object lock = new Object();
-
-	private TableLayout mainTable;
 	TableLayout myLayout;
 	AnimationDrawable animationDrawable;
 	Animation frombottom;

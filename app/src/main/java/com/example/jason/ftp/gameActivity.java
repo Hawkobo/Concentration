@@ -56,7 +56,6 @@ public class gameActivity extends AppCompatActivity
     private TableLayout mainTable;
     private UpdateCardsHandler handler;
     private int score;
-    private int name;
     Intent svc;
     boolean playing;
     ImageButton disableMusic;
@@ -98,7 +97,6 @@ public class gameActivity extends AppCompatActivity
 
 
         //access number of words and score from previous activity.
-        //Log.i("NUMWORDS IS ", String.valueOf(getIntent().getIntExtra("numwords", 0)));
         numWords = getIntent().getIntExtra("numWords", 10);
         score = getIntent().getIntExtra("score", 0);
 
@@ -270,13 +268,6 @@ public class gameActivity extends AppCompatActivity
         savedInstanceState.putSerializable("revealedCards", revealedCards);
         savedInstanceState.putSerializable("firstCard", firstCard);
         savedInstanceState.putSerializable("secondCard", secondCard);
-        //savedInstanceState.putSerializable("buttons", buttons);
-
-        //for(int i = 0; i < buttonRows.length; i++)
-        //{
-        //    buttonRows[i].removeAllViews();
-        //}
-
         savedInstanceState.putInt("score", score);
         Log.d("The score is ", "" + score);
         Log.i("THE INSTANCE ", "HAS BEEN SAVED");
@@ -291,22 +282,6 @@ public class gameActivity extends AppCompatActivity
         super.onRestoreInstanceState(savedInstanceState);
         cards = (int[][]) savedInstanceState.getSerializable("cards");
         revealedCards = (boolean[][]) savedInstanceState.getSerializable("revealedCards");
-        //buttons = (View[][]) savedInstanceState.getSerializable("buttons");
-
-        //mainTable.removeAllViews();
-
-        //for(int i = 0; i < buttons.length; i++)
-        //{
-        //    buttonRows[i] = new TableRow(context);
-        //    Log.d("Parent is ", "" + buttons[0][0].getParent());
-        //    buttonRows[i].setHorizontalGravity(Gravity.CENTER);
-
-        //    for(int j = 0; j < buttons[i].length; j++)
-        //    {
-        //        buttonRows[i].addView(buttons[i][j]);
-        //    }
-        //    mainTable.addView(buttonRows[i]);
-        //}
 
         for(int i = 0; i < buttons.length; i++)
         {
@@ -370,8 +345,6 @@ public class gameActivity extends AppCompatActivity
         {
             mainTable.addView(createRow(y));
         }
-
-        //mainTable.removeAllViewsInLayout();
 
         //HANDLES ADDING THE BUTTONS TO THE TABLEROWS
 
@@ -525,13 +498,6 @@ public class gameActivity extends AppCompatActivity
                 revealedCards[x][y] = true;
                 button.setBackgroundDrawable(images.get(cards[x][y]));
 
-                //turns++;
-                //((TextView)findViewById(R.id.tv1)).setText("Score: "+score);
-
-                //turns++;
-                //((TextView) findViewById(R.id.tv1)).setText("Score: " + score);
-
-
                 TimerTask tt = new TimerTask()
                 {
 
@@ -598,10 +564,8 @@ public class gameActivity extends AppCompatActivity
                         ((TextView) findViewById(R.id.tv1)).setText("Score: " + score);
                     }
 
-                    //buttons[firstCard.x][firstCard.y].setBackgroundDrawable(backImage);
                     revealedCards[firstCard.x][firstCard.y] = false;
 
-                    //buttons[secondCard.x][secondCard.y].setBackgroundDrawable(backImage);
                     revealedCards[secondCard.x][secondCard.y] = false;
 
                 }
