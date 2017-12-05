@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,22 +22,30 @@ import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class scoreScreenActivity extends AppCompatActivity {
 
+    private File file;
+
     private final int NUM_OF_SCORES = 5;
-    private InputStream is;
-    private OutputStream os;
-    private FileWriter fw;
+    private InputStreamReader isr;
+    private OutputStreamWriter osw;
+    private BufferedReader br;
+    private FileOutputStream fos;
+    private FileInputStream fis;
+    private String contents;
     private Scanner kb;
-    private AssetManager am;
     private String[] highScores;
     private int[] HSInts;
     private int score;
@@ -53,10 +62,22 @@ public class scoreScreenActivity extends AppCompatActivity {
         highScores = new String[NUM_OF_SCORES];
         HSInts = new int[NUM_OF_SCORES];
 
+        file = new File(this.getFilesDir(), "scores.txt");
+
         try {
-            File file = new File("scores.txt");
-            fw = new FileWriter(file);
-            kb = new Scanner(is);
+            if(file.length() == 0 || !file.exists())
+            {
+                fos = new FileOutputStream(file);
+                fos.write("ABC...5\nABC...4\nABC...3\nABC...2\nABC...1".getBytes());
+            }
+
+            fis = new FileInputStream(file);
+
+            int length = (int) file.length();
+            byte[] bytes = new byte[length];
+            fis.read(bytes);
+            contents = new String(bytes);
+            kb = new Scanner(contents);
         }
         catch(IOException e){
             e.getMessage();
@@ -83,9 +104,6 @@ public class scoreScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-
-
-
                 if (score >= HSInts[HSInts.length - 1])
                 {
 
@@ -105,6 +123,7 @@ public class scoreScreenActivity extends AppCompatActivity {
                             m_Text = input.getText().toString();
                             newEntry = m_Text + "..." + score;
                             try { updateHighScore(newEntry, score); } catch (IOException e) { e.getMessage(); }
+                            startActivity(new Intent(scoreScreenActivity.this, Manager.class));
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -128,29 +147,34 @@ public class scoreScreenActivity extends AppCompatActivity {
 
     private void updateHighScore(String newEntry, int score) throws IOException
     {
-        try {
-            am = this.getAssets();
-            is = am.open("scores.txt");
-            fw = new FileWriter(new File("scores.txt"));
-        }
-        catch(IOException e){
-            e.getMessage();
-        }
-
         int count = 0; boolean found = false;
         while (!found && count < highScores.length)
         {
             if (score >= HSInts[count])
             {
-                highScores[count] = newEntry;
+                String temp;
+                for (int i = count; i < highScores.length; i++)
+                {
+                    temp = highScores[i];
+                    highScores[i] = newEntry;
+                    newEntry = temp;
+                }
+                StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < highScores.length; i++)
                 {
-                    fw.write(highScores[i]);
+                    if (i == highScores.length - 1)
+                        sb.append(highScores[i]);
+                    else
+                        sb.append(highScores[i] + "\n");
                 }
+                fos = new FileOutputStream(file);
+                fos.write(sb.toString().getBytes());
                 found = true;
             }
             count++;
         }
-    }
 
+        fos.close();
+        fis.close();
+    }
 }
