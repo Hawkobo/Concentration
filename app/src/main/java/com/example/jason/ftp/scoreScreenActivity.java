@@ -1,5 +1,5 @@
 /***
- * file: HSActivity.java
+ * file: scoreScreenActivity.java
  * author: Team FTP
  * class: CS 245 - Programming Graphical User Interfaces
  *
