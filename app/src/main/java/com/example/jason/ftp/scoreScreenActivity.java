@@ -1,38 +1,34 @@
+/***
+ * file: scoreScreenActivity.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: This class creates the score screen after the game, and determines where to save the
+ * score if it is a new high score
+ *
+ **/
+
 package com.example.jason.ftp;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.airbnb.lottie.LottieAnimationView;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class scoreScreenActivity extends AppCompatActivity {
@@ -40,9 +36,6 @@ public class scoreScreenActivity extends AppCompatActivity {
     private File file;
     private int numWords;
     private final int NUM_OF_SCORES = 5;
-    private InputStreamReader isr;
-    private OutputStreamWriter osw;
-    private BufferedReader br;
     private FileOutputStream fos;
     private FileInputStream fis;
     private String contents;
@@ -54,35 +47,35 @@ public class scoreScreenActivity extends AppCompatActivity {
     private EditText input;
     private String m_Text = "";
     private String newEntry;
-    Intent svc;
-    ImageButton disableMusic;
-    Boolean playing;
+    private Intent svc;
+    private ImageButton disableMusic;
+    private Boolean playing;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //activity constructor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_screen);
 
-        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic); //button for adjusting music
         playing = getIntent().getExtras().getBoolean("playingValue");
 
-        svc =new Intent(this, MusicService.class);
+        svc = new Intent(this, MusicService.class);
         svc.setAction("com.example.jason.ftp.MusicService");
-        startService(svc);
+        startService(svc); //plays music by default
 
 
         if(playing ==true){
 
         }
         else{
-            stopService(svc);
+            stopService(svc); //do nothing if it is playing, but stop the service if it isn't
         }
         highScores = new String[NUM_OF_SCORES];
         HSInts = new int[NUM_OF_SCORES];
 
         numWords = getIntent().getIntExtra("numWords", 0);
 
-        switch(numWords)
+        switch(numWords) //chooses which high score file to use based on numWords selected by user
         {
             case 2:
                 file = new File(this.getFilesDir(), "scores2.txt");
@@ -116,7 +109,7 @@ public class scoreScreenActivity extends AppCompatActivity {
         }
 
         try {
-            if(file.length() == 0 || !file.exists())
+            if(file.length() == 0 || !file.exists()) //creates file if it hasn't been already
             {
                 fos = new FileOutputStream(file);
                 fos.write("ABC...5\nABC...4\nABC...3\nABC...2\nABC...1".getBytes());
@@ -128,13 +121,13 @@ public class scoreScreenActivity extends AppCompatActivity {
             byte[] bytes = new byte[length];
             fis.read(bytes);
             contents = new String(bytes);
-            kb = new Scanner(contents);
+            kb = new Scanner(contents); //takes the contents of the file and places them in a String for easy management
         }
         catch(IOException e){
             e.getMessage();
         }
 
-        for (int i = 0; i < highScores.length; i++)
+        for (int i = 0; i < highScores.length; i++) //places the data into arrays
         {
             highScores[i] = kb.nextLine();
             HSInts[i] = Integer.parseInt(highScores[i].replaceAll("[\\D]", ""));
@@ -146,11 +139,11 @@ public class scoreScreenActivity extends AppCompatActivity {
         StringBuilder sb = new StringBuilder();
         sb.append(extras.getInt("score"));
 
-        scoreLabel.setText(sb.toString());
+        scoreLabel.setText(sb.toString()); //sets scores on score screen display
         builder = new AlertDialog.Builder(this);
         input = new EditText(this);
 
-        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener()
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener() //speaker in corner for music
         {
 
             @Override
@@ -170,7 +163,7 @@ public class scoreScreenActivity extends AppCompatActivity {
 
         });
 
-        ((Button)findViewById(R.id.scoreMenuButton)).setOnClickListener(new View.OnClickListener() {
+        ((Button)findViewById(R.id.scoreMenuButton)).setOnClickListener(new View.OnClickListener() { //menu
 
             @Override
             public void onClick(View view)
@@ -185,7 +178,7 @@ public class scoreScreenActivity extends AppCompatActivity {
                     // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                     input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
                     input.setFilters(new InputFilter[] { new InputFilter.LengthFilter(3) });
-                    builder.setView(input);
+                    builder.setView(input); //can only enter 3 characters
 
                     // Set up the buttons
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -211,7 +204,7 @@ public class scoreScreenActivity extends AppCompatActivity {
                 {
                     Intent i = new Intent(com.example.jason.ftp.scoreScreenActivity.this, Manager.class);
                     i.putExtra("playingValue", playing);
-                    startActivity(i);                }
+                    startActivity(i);                } //go back to menu, carry music with activity
 
             }
         });
@@ -222,10 +215,10 @@ public class scoreScreenActivity extends AppCompatActivity {
         int count = 0; boolean found = false;
         while (!found && count < highScores.length)
         {
-            if (score >= HSInts[count])
+            if (score >= HSInts[count]) //if user score is greater than lowest score, sort in
             {
                 String temp;
-                for (int i = count; i < highScores.length; i++)
+                for (int i = count; i < highScores.length; i++) //rotates variables out of list
                 {
                     temp = highScores[i];
                     highScores[i] = newEntry;
@@ -240,7 +233,7 @@ public class scoreScreenActivity extends AppCompatActivity {
                         sb.append(highScores[i] + "\n");
                 }
                 fos = new FileOutputStream(file);
-                fos.write(sb.toString().getBytes());
+                fos.write(sb.toString().getBytes()); //writes new score list into file
                 found = true;
             }
             count++;

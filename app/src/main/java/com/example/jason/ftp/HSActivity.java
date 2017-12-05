@@ -1,24 +1,29 @@
+/***
+ * file: HSActivity.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: This creates the high score screen, and creates the files used to store the different
+ * high scores for each word count.
+ *
+ **/
+
 package com.example.jason.ftp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Scanner;
 
 public class HSActivity extends AppCompatActivity {
@@ -29,7 +34,6 @@ public class HSActivity extends AppCompatActivity {
     private FileInputStream fis;
     private String contents;
     private Scanner kb;
-    private AssetManager am;
     private String[] highScores;
     private FileOutputStream fos;
     private int newScore;
@@ -38,23 +42,21 @@ public class HSActivity extends AppCompatActivity {
     private TextView score3;
     private TextView score4;
     private TextView score5;
-
-    ImageButton disableMusic;
-    boolean playing;
-
-    Intent svc;
+    private ImageButton disableMusic;
+    private boolean playing;
+    private Intent svc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hs);
 
-        disableMusic = (ImageButton) findViewById(R.id.disableMusic);
+        disableMusic = (ImageButton) findViewById(R.id.disableMusic); //speaker button on top
         playing = getIntent().getExtras().getBoolean("playingValue");
 
         svc =new Intent(this, MusicService.class);
         svc.setAction("com.example.jason.ftp.MusicService");
-        startService(svc);
+        startService(svc); //start music by default
 
         if(playing ==true){
 
@@ -63,7 +65,7 @@ public class HSActivity extends AppCompatActivity {
             stopService(svc);
         }
 
-        setHighScores();
+        setHighScores(); //method for obtaining and displaying scores to screen
 
         ((Button)findViewById(R.id.menuButton)).setOnClickListener(new View.OnClickListener() {
 
@@ -81,7 +83,7 @@ public class HSActivity extends AppCompatActivity {
     private void setHighScores() {
         highScores = new String[NUM_OF_SCORES];
 
-        score1 = (TextView) findViewById(R.id.score1);
+        score1 = (TextView) findViewById(R.id.score1); //variables for actual TextView objects on screen
         score2 = (TextView) findViewById(R.id.score2);
         score3 = (TextView) findViewById(R.id.score3);
         score4 = (TextView) findViewById(R.id.score4);
@@ -90,7 +92,7 @@ public class HSActivity extends AppCompatActivity {
         newScore = getIntent().getIntExtra("score", 0);
         numWords = getIntent().getIntExtra("numWords", 0);
 
-        switch (numWords) {
+        switch (numWords) { //determines which file to access based on NumWords from user
             case 2:
                 file = new File(this.getFilesDir(), "scores2.txt");
                 break;
@@ -123,7 +125,7 @@ public class HSActivity extends AppCompatActivity {
         }
 
 
-        try {
+        try { //initialization of file if not created yet
             if (file.length() == 0 || !file.exists()) {
                 fos = new FileOutputStream(file);
                 fis = new FileInputStream(file);
@@ -136,22 +138,22 @@ public class HSActivity extends AppCompatActivity {
             byte[] bytes = new byte[length];
             fis.read(bytes);
             contents = new String(bytes);
-            kb = new Scanner(contents);
+            kb = new Scanner(contents); //places contents in String for easy access
         } catch (IOException e) {
             e.getMessage();
         }
 
         for (int i = 0; i < highScores.length; i++) {
-            highScores[i] = kb.nextLine();
+            highScores[i] = kb.nextLine(); //loads data into array
         }
 
-        score1.setText(highScores[0]);
+        score1.setText(highScores[0]); //sets list from array
         score2.setText(highScores[1]);
         score3.setText(highScores[2]);
         score4.setText(highScores[3]);
         score5.setText(highScores[4]);
 
-        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener() { //speaker button
 
             @Override
             public void onClick(View v) {
@@ -162,13 +164,13 @@ public class HSActivity extends AppCompatActivity {
                     startService(svc);
                     playing = true;
                 }
-                ((Button) findViewById(R.id.menuButton)).setOnClickListener(new View.OnClickListener() {
+                ((Button) findViewById(R.id.menuButton)).setOnClickListener(new View.OnClickListener() { //menu
 
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(com.example.jason.ftp.HSActivity.this, Manager.class);
                         i.putExtra("playingValue", playing);
-                        startActivity(i);
+                        startActivity(i); //goes back to main menu and takes music with activity
 
                     }
 
