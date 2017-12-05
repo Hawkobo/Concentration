@@ -3,8 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://D:\My Documents\Android Studio Projects\Concentration Project\Concentration.iml" filepath="D:\My Documents\Android Studio Projects\Concentration Project\Concentration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Concentration Project.iml" filepath="$PROJECT_DIR$/Concentration Project.iml" />
       <module fileurl="file://C:\Users\user\Desktop\FTP\Concentration Project.iml" filepath="C:\Users\user\Desktop\FTP\Concentration Project.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FTP.iml" filepath="$PROJECT_DIR$/FTP.iml" />
+      <module fileurl="file://D:\My Documents\Android Studio Projects\Concentration Project\FTP.iml" filepath="D:\My Documents\Android Studio Projects\Concentration Project\FTP.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="ABC 5"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="24sp" />
@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="ABC 4"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="24sp" />
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="ABC 3"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="24sp" />
@@ -106,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="ABC 2"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="24sp" />
@@ -121,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="62dp"
                 android:layout_weight="1"
-                android:text="TextView"
+                android:text="ABC 1"
                 android:textAlignment="center"
                 android:textColor="@android:color/background_dark"
                 android:textSize="24sp" />
