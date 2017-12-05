@@ -1,3 +1,15 @@
+/***************************************************************
+ * file: MusicService.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: Service that allows music to be played across
+ * multiple activities.
+ ****************************************************************/
+
 package com.example.jason.ftp;
 
 import android.app.Service;
@@ -9,10 +21,13 @@ import android.os.IBinder;
 public class MusicService extends Service {
     private static final String TAG = null;
     MediaPlayer player;
+
     public IBinder onBind(Intent arg0) {
 
         return null;
     }
+
+    //When service is created, start playing music.
     @Override
     public void onCreate() {
         super.onCreate();
@@ -41,12 +56,14 @@ public class MusicService extends Service {
     }
 
 
+    //When app is destroyed, stop and release music.
     @Override
     public void onDestroy() {
         player.stop();
         player.release();
     }
 
+    //optional override method
     @Override
     public void onLowMemory() {
 

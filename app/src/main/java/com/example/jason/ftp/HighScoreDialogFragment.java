@@ -1,3 +1,16 @@
+/***************************************************************
+ * file: HighScoreDialogFragment.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: The dialog fragment when high score is clicked.
+ * Allows the user to choose which high score they want displayed
+ * based on the number of words.
+ ****************************************************************/
+
 package com.example.jason.ftp;
 
 import android.app.Dialog;
@@ -9,6 +22,7 @@ import android.support.v7.app.AlertDialog;
 
 public class HighScoreDialogFragment extends DialogFragment
 {
+    //overidden method that pops up dialog
     @Override
     public Dialog onCreateDialog(Bundle savedInstancedState)
     {
@@ -23,7 +37,7 @@ public class HighScoreDialogFragment extends DialogFragment
                         String[] optionsArray = getResources().getStringArray(R.array.play_dialog_string_array);
 
                         Intent nextAct = new Intent(getActivity(), HSActivity.class);
-                        nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));
+                        nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));        //pass extras for num words and music is playing boolean
                         nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));
                         startActivity(nextAct);
                     }
@@ -33,7 +47,7 @@ public class HighScoreDialogFragment extends DialogFragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
                     {
-
+                            //do nothing
                     }
                 });
 

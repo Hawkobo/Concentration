@@ -1,3 +1,15 @@
+/***************************************************************
+ * file: gameActivity.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: Handles the game interface, fully functional game
+ * that keeps track of score.
+ ****************************************************************/
+
 package com.example.jason.ftp;
 
 import android.app.DialogFragment;
@@ -10,18 +22,12 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -55,6 +61,7 @@ public class gameActivity extends AppCompatActivity
     boolean playing;
     ImageButton disableMusic;
 
+    //When backspace is pressed, return to menu.
     @Override
     public void onBackPressed() {
         Intent i = new Intent(gameActivity.this, Manager.class);
@@ -62,23 +69,26 @@ public class gameActivity extends AppCompatActivity
         startActivity(i);
     }
 
+    //When activity is created, perform the following:
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
 
+        //find music button
         disableMusic = (ImageButton) findViewById(R.id.disableMusic);
 
-
+        //determine if music is playing or not
         playing = getIntent().getExtras().getBoolean("playingValue");
 
 
-
+        //handles music
         svc =new Intent(this, MusicService.class);
         svc.setAction("com.example.jason.ftp.MusicService");
         startService(svc);
 
+        //conditionals that allow same music state across activities
         if(playing ==true){
 
         }
@@ -87,14 +97,17 @@ public class gameActivity extends AppCompatActivity
         }
 
 
+        //access number of words and score from previous activity.
         //Log.i("NUMWORDS IS ", String.valueOf(getIntent().getIntExtra("numwords", 0)));
         numWords = getIntent().getIntExtra("numWords", 10);
         score = getIntent().getIntExtra("score", 0);
 
+        //updates handler to take care of images
         handler = new UpdateCardsHandler();
         loadImages();
         backImage = getResources().getDrawable(R.drawable.icon);
 
+        //switch statement to determine board dimension
         switch(numWords)
         {
             case 2:
@@ -128,9 +141,11 @@ public class gameActivity extends AppCompatActivity
                 break;
         }
 
+        //find music icon
         ((ImageButton) findViewById(R.id.disableMusic)).setOnClickListener(new View.OnClickListener()
         {
 
+            //when clicked, stop or play music
             @Override
             public void onClick(View v)
             {
@@ -147,9 +162,12 @@ public class gameActivity extends AppCompatActivity
 
 
         });
+
+        //search for try again button
         ((Button) findViewById(R.id.button1)).setOnClickListener(new View.OnClickListener()
         {
 
+            //if first and second card are chosen, flip image
             @Override
             public void onClick(View v)
             {
@@ -165,8 +183,10 @@ public class gameActivity extends AppCompatActivity
 
         });
 
+        //find new game button
         ((Button)findViewById(R.id.button2)).setOnClickListener(new View.OnClickListener() {
 
+            //prompts dialog fragment for determining new game
             @Override
             public void onClick(View view)
             {
@@ -180,9 +200,11 @@ public class gameActivity extends AppCompatActivity
             }
         });
 
+        //find exit game button
         ((Button) findViewById(R.id.button3)).setOnClickListener(new View.OnClickListener()
         {
 
+            //when clicked, reveal all cards
             @Override
             public void onClick(View v)
             {
@@ -195,10 +217,12 @@ public class gameActivity extends AppCompatActivity
                     }
                 }
 
+                //do not allow click when game is ended
                 findViewById(R.id.button1).setClickable(false);
                 findViewById(R.id.button2).setClickable(false);
                 findViewById(R.id.button3).setClickable(false);
 
+                //allow user to see answers with a delay
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
@@ -223,6 +247,8 @@ public class gameActivity extends AppCompatActivity
 
     }
 
+    //MUSIC OVERIDDEN METHODS
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -236,6 +262,7 @@ public class gameActivity extends AppCompatActivity
         super.onPause();
     }
 
+    //SAVE THE STATE OF THE CARDS FOR ROTATION
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
@@ -257,6 +284,7 @@ public class gameActivity extends AppCompatActivity
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    //When instance is restored, restore the cards from before rotation
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState)
     {
@@ -311,6 +339,7 @@ public class gameActivity extends AppCompatActivity
     }
 
 
+    //CREATE NEW GAME METHOD
     public void newGame(int c, int r)
     {
 
@@ -344,6 +373,8 @@ public class gameActivity extends AppCompatActivity
 
         //mainTable.removeAllViewsInLayout();
 
+        //HANDLES ADDING THE BUTTONS TO THE TABLEROWS
+
         for(int i = 0; i < buttons.length; i++)
         {
             buttonRows[i] = new TableRow(context);
@@ -360,11 +391,13 @@ public class gameActivity extends AppCompatActivity
         firstCard = null;
         loadCards();
 
+        //UPDATE SCORE
         ((TextView) findViewById(R.id.tv1)).setText("Score: " + score);
 
 
     }
 
+    //LOAD ALL IMAGES
     private void loadImages()
     {
         images = new ArrayList<Drawable>();
@@ -379,20 +412,10 @@ public class gameActivity extends AppCompatActivity
         images.add(getResources().getDrawable(R.drawable.card8));
         images.add(getResources().getDrawable(R.drawable.card9));
         images.add(getResources().getDrawable(R.drawable.card10));
-        images.add(getResources().getDrawable(R.drawable.card11));
-        images.add(getResources().getDrawable(R.drawable.card12));
-        images.add(getResources().getDrawable(R.drawable.card13));
-        images.add(getResources().getDrawable(R.drawable.card14));
-        images.add(getResources().getDrawable(R.drawable.card15));
-        images.add(getResources().getDrawable(R.drawable.card16));
-        images.add(getResources().getDrawable(R.drawable.card17));
-        images.add(getResources().getDrawable(R.drawable.card18));
-        images.add(getResources().getDrawable(R.drawable.card19));
-        images.add(getResources().getDrawable(R.drawable.card20));
-        images.add(getResources().getDrawable(R.drawable.card21));
 
     }
 
+    //LOAD CARDS, PERFORM NECESSARY ARITHMETICS
     private void loadCards()
     {
         try
@@ -435,6 +458,7 @@ public class gameActivity extends AppCompatActivity
 
     }
 
+    //CREATES ROWS IN THE TABLEROWS
     private TableRow createRow(int y)
     {
         TableRow row = new TableRow(context);
@@ -448,6 +472,7 @@ public class gameActivity extends AppCompatActivity
         return row;
     }
 
+    //CREATES IMAGE BUTTONS(CARDS)
     private View createImageButton(int x, int y)
     {
         Button button = new Button(context);
@@ -459,6 +484,7 @@ public class gameActivity extends AppCompatActivity
         return button;
     }
 
+    //CUSTOM BUTTON LISTENER FOR HANDLING CARD TURNS
     class ButtonListener implements View.OnClickListener
     {
 
@@ -535,6 +561,7 @@ public class gameActivity extends AppCompatActivity
 
     }
 
+    //HANDLES CARD UPDATES
     class UpdateCardsHandler extends Handler
     {
 
@@ -547,6 +574,7 @@ public class gameActivity extends AppCompatActivity
             }
         }
 
+        //METHOD CHECKS CORRECTNESS OF CHOSEN CARDS
         public void checkCards()
         {
             boolean gameOver = true;
@@ -581,6 +609,7 @@ public class gameActivity extends AppCompatActivity
 
 
 
+            //DETERMINES IF GAME IS OVER
             for (int i = 0; i < revealedCards.length; i++)
             {
                 for (int j = 0; j < revealedCards[i].length; j++)
@@ -592,6 +621,7 @@ public class gameActivity extends AppCompatActivity
                 }
             }
 
+            //HANDLES PASSING OF VALUES TO NEXT ACTIVITY AND CREATES NEW SCORE SCREEN ACTIVITY
             if (gameOver)
             {
                 Intent i = new Intent(gameActivity.this,scoreScreenActivity.class);

@@ -1,3 +1,15 @@
+/***************************************************************
+ * file: PlayDialogFragment.java
+ * author: Team FTP
+ * class: CS 245 - Programming Graphical User Interfaces
+ *
+ * assignment: Android Studio Project
+ * date last modified: 12/5/17
+ *
+ * purpose: The dialog fragment that prompts the user
+ * for the desired amount of words.
+ ****************************************************************/
+
 package com.example.jason.ftp;
 
 import android.content.DialogInterface;
@@ -11,6 +23,7 @@ import com.example.jason.ftp.R;
 
 public class PlayDialogFragment extends DialogFragment
 {
+    //When dialog is created
     @Override
     public Dialog onCreateDialog(Bundle savedInstancedState)
     {
@@ -25,8 +38,8 @@ public class PlayDialogFragment extends DialogFragment
                         String[] optionsArray = getResources().getStringArray(R.array.play_dialog_string_array);
 
                         Intent nextAct = new Intent(getActivity(), gameActivity.class);
-                        nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));
-                        nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));
+                        nextAct.putExtra("playingValue",getArguments().getBoolean("playingValue"));  // pass extra for music
+                        nextAct.putExtra("numWords", Integer.parseInt(optionsArray[i]));    //pass extra for num words
                         startActivity(nextAct);
                     }
                 })
@@ -35,7 +48,7 @@ public class PlayDialogFragment extends DialogFragment
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i)
                     {
-
+                        //do nothing when canceled.
                     }
                 });
 
