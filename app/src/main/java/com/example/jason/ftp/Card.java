@@ -20,7 +20,7 @@ public class Card implements Serializable{
 
 	public int x;
 	public int y;
-	public Button button; 	//used to select the card on screen
+	public transient Button button; //used to select the card on screen
 	
 	public Card(Button button, int x,int y) { //each card has a button and x and y coords
 		this.x = x;
